@@ -1,15 +1,17 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { randomBytes } from "node:crypto";
 
 // The db module reads DATA_DIR at import time, so the test database location
 // must be set before the dynamic imports below. Kept inside the repo (and
-// gitignored) rather than the OS tmpdir.
+// gitignored) rather than the OS tmpdir. Vitest re-evaluates this module per
+// test, so beforeEach wipes and reseeds to keep tests independent of any
+// shared-file accumulation.
 const testDir = join(
   process.cwd(),
   ".test-data",
-  `run-${Date.now()}-${process.pid}`,
+  `run-${Date.now()}-${process.pid}-${randomBytes(4).toString("hex")}`,
 );
 mkdirSync(testDir, { recursive: true });
 process.env.DATA_DIR = testDir;
@@ -18,11 +20,19 @@ process.env.DEMO_MODE = "false";
 const { db } = await import("./db");
 const { findSource, ingestKuma } = await import("./ingest");
 
-const token = randomBytes(24).toString("base64url");
-db.prepare(
-  "INSERT INTO sources (name, kind, token, auto_create) VALUES ('t', 'kuma', ?, 1)",
-).run(token);
-const source = findSource(token, "kuma")!;
+let token: string;
+let source: { id: number; auto_create: number };
+
+beforeEach(() => {
+  db.exec(
+    "DELETE FROM bindings; DELETE FROM transitions; DELETE FROM components; DELETE FROM sources;",
+  );
+  token = randomBytes(24).toString("base64url");
+  db.prepare(
+    "INSERT INTO sources (name, kind, token, auto_create) VALUES ('t', 'kuma', ?, 1)",
+  ).run(token);
+  source = findSource(token, "kuma")!;
+});
 
 const NOW = 1_800_000_000;
 
@@ -108,9 +118,6 @@ describe("ingestKuma", () => {
   });
 
   it("ignores unknown monitors when auto-create is off", () => {
-    db.prepare("UPDATE sources SET auto_create = 0 WHERE id = ?").run(
-      source.id,
-    );
     const gated = { ...source, auto_create: 0 };
     expect(ingestKuma(gated, kumaBody(0, 99, "Ghost"), NOW).kind).toBe(
       "ignored",
