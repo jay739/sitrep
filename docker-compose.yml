@@ -1,0 +1,26 @@
+# Quickstart:
+#   1. Set ADMIN_PASSWORD and ORIGIN below (ORIGIN = the public URL you serve this from).
+#   2. docker compose up -d
+#   3. Open the app, log in at /admin/login, create a source, and point your
+#      Uptime Kuma webhook notifications at the source URL it shows you.
+services:
+  sitrep:
+    image: ghcr.io/jay739/sitrep:latest
+    # Building locally instead: comment the image line and uncomment:
+    # build: .
+    container_name: sitrep
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      ADMIN_PASSWORD: change-me
+      SITE_NAME: Status
+      ORIGIN: https://status.example.com
+      # DEMO_MODE: 'true'          # explore with fictional data first
+      # TELEGRAM_BOT_TOKEN: ''
+      # TELEGRAM_CHAT_ID: ''
+    volumes:
+      - sitrep-data:/data
+
+volumes:
+  sitrep-data:

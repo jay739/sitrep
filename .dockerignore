@@ -1,0 +1,11 @@
+.git
+.github
+.toolchain
+.test-data
+.svelte-kit
+node_modules
+build
+data
+.env
+.env.*
+*.log
