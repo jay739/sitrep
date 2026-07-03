@@ -37,11 +37,13 @@
 <svelte:head>
 	<title>{data.siteName}</title>
 	<meta http-equiv="refresh" content="60" />
+	<link rel="alternate" type="application/rss+xml" title="{data.siteName} incidents" href="/feed.xml" />
 </svelte:head>
 
 <main>
 	<header>
 		<h1>{data.siteName}</h1>
+		<a class="rss" href="/feed.xml">RSS</a>
 	</header>
 
 	{#if !data.ok}
@@ -168,15 +170,34 @@
 		padding: 2rem 1rem 4rem;
 	}
 
-	header h1 {
-		font-size: 1.25rem;
-		margin: 0 0 1.5rem;
+	header {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		margin-bottom: 1.5rem;
 	}
 
+	header h1 {
+		font-size: 1.25rem;
+		margin: 0;
+	}
+
+	.rss {
+		font-size: 0.8rem;
+		color: var(--text-faint);
+	}
+
+	/* Tinted card with ink text instead of white-on-saturated-color: the
+	   status hue rides the wash, dot, and left border while the words stay
+	   readable in both themes (white on the warning yellow fails contrast). */
 	.banner {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
 		border-radius: var(--radius);
+		border: 1px solid var(--border);
+		border-left-width: 4px;
 		padding: 1rem 1.25rem;
-		color: #fff;
 		margin-bottom: 1.5rem;
 	}
 
@@ -187,21 +208,50 @@
 
 	.banner p {
 		margin: 0.5rem 0 0;
+		color: var(--text-muted);
+	}
+
+	.banner::before {
+		content: '';
+		width: 0.85rem;
+		height: 0.85rem;
+		border-radius: 50%;
+		flex-shrink: 0;
 	}
 
 	.banner.ok {
+		background: color-mix(in srgb, var(--status-operational) 10%, var(--surface));
+		border-left-color: var(--status-operational);
+	}
+	.banner.ok::before {
 		background: var(--status-operational);
 	}
 	.banner.warn {
+		background: color-mix(in srgb, var(--status-degraded) 12%, var(--surface));
+		border-left-color: var(--status-degraded);
+	}
+	.banner.warn::before {
 		background: var(--status-degraded);
 	}
 	.banner.partial {
+		background: color-mix(in srgb, var(--status-partial) 12%, var(--surface));
+		border-left-color: var(--status-partial);
+	}
+	.banner.partial::before {
 		background: var(--status-partial);
 	}
 	.banner.major {
+		background: color-mix(in srgb, var(--status-major) 10%, var(--surface));
+		border-left-color: var(--status-major);
+	}
+	.banner.major::before {
 		background: var(--status-major);
 	}
 	.banner.maint {
+		background: color-mix(in srgb, var(--status-maintenance) 10%, var(--surface));
+		border-left-color: var(--status-maintenance);
+	}
+	.banner.maint::before {
 		background: var(--status-maintenance);
 	}
 
@@ -288,24 +338,11 @@
 		margin: 0.15rem 0 0 1.35rem;
 	}
 
+	/* Text wears ink tokens; the dot beside it carries the status color, so
+	   meaning never rides on a sub-3:1 color alone. */
 	.component-status {
 		font-size: 0.85rem;
-	}
-
-	.component-status.ok {
-		color: var(--status-operational);
-	}
-	.component-status.warn {
-		color: var(--status-degraded);
-	}
-	.component-status.partial {
-		color: var(--status-partial);
-	}
-	.component-status.major {
-		color: var(--status-major);
-	}
-	.component-status.maint {
-		color: var(--status-maintenance);
+		color: var(--text-muted);
 	}
 
 	.dot {
@@ -346,6 +383,11 @@
 		min-width: 2px;
 	}
 
+	.bar:hover {
+		outline: 2px solid var(--ring);
+		outline-offset: 1px;
+	}
+
 	.bar.up {
 		background: var(--status-operational);
 	}
@@ -359,9 +401,10 @@
 	}
 
 	.uptime-summary {
-		color: var(--text-muted);
+		color: var(--text-faint);
 		font-size: 0.78rem;
 		margin: 0.35rem 0 0;
+		font-variant-numeric: tabular-nums;
 	}
 
 	.section-title {
