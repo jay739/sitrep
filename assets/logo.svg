@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
+  <g id="icon">
+    <rect x="64" y="176" width="256" height="160" rx="80" ry="80" fill="none" stroke="#e1e0d9" stroke-width="6"/>
+    <circle cx="128" cy="256" r="32" fill="#0ca30c"/>
+    <circle cx="192" cy="256" r="32" fill="#fab219"/>
+    <circle cx="256" cy="256" r="32" fill="#d03b3b"/>
+  </g>
+  <g id="wordmark">
+    <text x="380" y="256" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif" font-size="180" font-weight="700" letter-spacing="-2" fill="#0b0b0b" dominant-baseline="central">sitrep</text>
+  </g>
+</svg>

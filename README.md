@@ -1,5 +1,9 @@
 # sitrep
 
+<p align="center">
+  <img src="assets/logo.svg" alt="sitrep" width="420" />
+</p>
+
 A self-hosted status page and incident communication tool that layers on top of the
 monitoring you already run. It does no monitoring itself. Uptime Kuma pushes heartbeats to
 it over a webhook, and sitrep turns those into a public status page with a proper incident
