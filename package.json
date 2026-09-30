@@ -16,6 +16,9 @@
   "dependencies": {
     "zod": "^3.24.0"
   },
+  "overrides": {
+    "cookie": "^0.7.0"
+  },
   "devDependencies": {
     "@sveltejs/adapter-node": "^5.2.0",
     "@sveltejs/kit": "^2.20.0",
