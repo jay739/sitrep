@@ -1,7 +1,10 @@
 # sitrep
 
 <p align="center">
-  <img src="assets/logo.svg" alt="sitrep" width="420" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg" />
+    <img src="assets/logo.svg" alt="sitrep" width="420" />
+  </picture>
 </p>
 
 A self-hosted status page and incident communication tool that layers on top of the
