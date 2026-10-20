@@ -9,3 +9,7 @@ data/
 *.log
 .test-data/
 logos/
+
+# AI build specs and session reports: kept locally, never committed
+MISSION*.md
+REPORT.md
