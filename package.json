@@ -14,7 +14,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "zod": "^3.24.0"
+    "zod": "^4.6.6"
   },
   "overrides": {
     "cookie": "^0.7.0"
